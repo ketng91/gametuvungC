@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lớp Anh thầy Kết - Game Từ vựng C</title>
 
 <style>
@@ -26,150 +27,131 @@ body {
 }
 */
 
-/* ====== CẢNH BÁO SAI ====== */
+/* CẢNH BÁO */
 .wrong {
   border: 3px solid red;
   background: #ffe6e6;
 }
 
-@keyframes shake {
-  0% { transform: translateX(-50%) translateX(0); }
-  25% { transform: translateX(-50%) translateX(-8px); }
-  50% { transform: translateX(-50%) translateX(8px); }
-  75% { transform: translateX(-50%) translateX(-8px); }
-  100% { transform: translateX(-50%) translateX(0); }
-}
-
-/* ====== BOX TỪ ====== */
+/* BOX TỪ */
 #wordBox {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  padding: 14px;
   text-align: center;
-  width: 70vw;
-  max-width: 650px;
-  padding: 12px 16px;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255,255,255,0.9);
   border-radius: 12px;
+  box-sizing: border-box;
 }
 
 #word {
-  font-size: 34px;
+  font-size: clamp(26px, 6vw, 38px);
   color: #D73535;
-  white-space: normal;
-  word-wrap: break-word;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 #tagline {
-  font-size: 20px;
+  font-size: clamp(14px, 4vw, 20px);
   color: #061E29;
-  margin-top: 6px;
-  opacity: 0.8;
+  margin-top: 4px;
 }
 
-/* ====== INPUT + NÚT ====== */
+/* INPUT + BUTTON */
 #inputContainer {
   position: fixed;
-  bottom: 25px;
+  bottom: 18px;
+width: 140%;       (co giãn theo màn hình)
+max-width: 800px;  (không quá to trên điện thoại)
+  margin: 0 auto;     /* canh giữa PC */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
+  flex-direction: column; 
+  justify-content: center;
   gap: 10px;
   align-items: center;
+  padding: 0 8px;
+  box-sizing: border-box;
 }
 
 #input {
-  color: #ff4500;
-  font-size: 38px;
-  padding: 8px 12px;
-  width: 320px;
+  font-size: clamp(24px, 6vw, 36px);
+  padding: 6px;
+  width: 50%;
   text-align: center;
   border-radius: 8px;
   border: 2px solid #ff4500;
-  transition: background 0.3s, border 0.3s;
-
+  color: #ff4500;
 }
 
-/* Nút Đáp án và Next */
+/* Buttons */
 button.game-btn {
-  padding: 10px 16px;
-  font-size: 16px;
+  font-size: clamp(14px, 4vw, 18px);
+  padding: 8px 10px;
   background-color: #5DD3B6;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   color: #fff;
-  transition: background-color 0.3s;
 }
+
+#buttonsRow {
+  display: flex;
+  gap: 10px;
+}
+
 
 button.game-btn:hover {
-  background-color: #FFE52A;
+  background-color: #ffb3ba;
 }
 
-/* ====== SCORE ====== */
+/* SCORE */
 #score {
   position: fixed;
-  top: 10px;
-  right: 20px;
-  font-size: 18px;
+  top: 8px;
+  right: 12px;
+  font-size: clamp(16px, 4vw, 20px);
 }
 
-/* ====== PHÁO HOA ====== */
+/* PHÁO HOA giữ nguyên */
 .confetti {
   position: fixed;
   bottom: 60px;
   left: 50%;
   width: 10px;
   height: 10px;
-  background: red;
   opacity: 0.9;
   animation: pop 900ms ease-out forwards;
 }
 
 @keyframes pop {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: 
-      translate(
-        calc(var(--x) * 0.5),
-        calc(var(--y) * 0.4)
-      )
-      scale(1.1);
-    opacity: 1;
-  }
-
-  100% {
-    transform: 
-      translate(var(--x), var(--y))
-      scale(0.5);
-    opacity: 0;
-  }
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  50% { transform: translate(calc(var(--x)*0.5), calc(var(--y)*0.4)) scale(1.1); opacity:1;}
+  100% { transform: translate(var(--x), var(--y)) scale(0.5); opacity:0;}
 }
 </style>
 </head>
 
 <body>
-
 <div id="score">Score: 0</div>
 
 <div id="wordBox">
   <div id="word"></div>
-  <div id="tagline">KG Khoá Tổng ôn cấp tốc THPTQG, ôn vào 10. Lớp TOEIC 2-4 skills. Onl/off Đà Nẵng.</div>
+  <div id="tagline">Lớp Anh thầy Kết: KG onl/off Đà Nẵng các khoá Khoá Tổng ôn THPTQG, Anh vào 10, Lớp TOEIC 2-4 skills</div>
 </div>
 
-<!-- INPUT + NÚT -->
 <div id="inputContainer">
-  <input id="input" placeholder="Gõ rồi nhấn Enter…" autofocus />
-  <button id="showAnswerBtn" class="game-btn">Đáp án</button>
-  <button id="nextWordBtn" class="game-btn">Next</button>
+    <input id="input" placeholder="Gõ rồi nhấn Enter…" autofocus />
+   <div id="buttonsRow">
+    <button id="showAnswerBtn" class="game-btn">Đáp án</button>
+    <button id="nextWordBtn" class="game-btn">Next</button>
 </div>
+
+
 
 <script>
 /* ====== BỘ TỪ VỰNG (BẠN TỰ THÊM) ====== */
@@ -2404,12 +2386,6 @@ const words = [
 
 
 
-
-
-
-
-
-
 ];
 
 
@@ -2418,9 +2394,8 @@ let shuffledWords = [];
 let current = null;
 let score = 0;
 let y = 0;
-const speed = 0.4;
+const speed = 0.3;
 
-/* ====== XÀO BÀI ====== */
 function shuffleWords() {
   shuffledWords = [...words];
   for (let i = shuffledWords.length - 1; i > 0; i--) {
@@ -2429,37 +2404,23 @@ function shuffleWords() {
   }
 }
 
-/* ====== TỪ MỚI ====== */
 function newWord() {
-  if (shuffledWords.length === 0) {
-    shuffleWords();
-  }
-
+  if (shuffledWords.length === 0) shuffleWords();
   current = shuffledWords.shift();
   document.getElementById("word").textContent = current[0];
-
   const input = document.getElementById("input");
-  input.value = current[1][0]; // gợi ý chữ cái đầu
+  input.value = current[1][0];
   input.focus();
-
   y = 0;
 }
 
-/* ====== TỪ RƠI ====== */
 function fall() {
   y += speed;
   document.getElementById("wordBox").style.top = y + "px";
-
-  if (y < window.innerHeight - 80) {
-    requestAnimationFrame(fall);
-  } else {
-    newWord(); // rơi tới đáy → từ mới
-    y = 0;   
-    requestAnimationFrame(fall);
-  }
+  if (y < window.innerHeight - 120) requestAnimationFrame(fall);
+  else { newWord(); y = 0; requestAnimationFrame(fall); }
 }
 
-/* ====== NHẬP TỪ ====== */
 document.getElementById("input").addEventListener("keydown", e => {
   if (e.key === "Enter") {
     const typed = e.target.value.trim().toLowerCase();
@@ -2469,51 +2430,37 @@ document.getElementById("input").addEventListener("keydown", e => {
     if (typed === answer) {
       score++;
       document.getElementById("score").textContent = "Score: " + score;
-      celebrate();   // 🎉 PHÁO HOA
+      celebrate();
       inputBox.classList.remove("wrong");
       newWord();
     } else {
       inputBox.classList.add("wrong");
       setTimeout(() => inputBox.classList.remove("wrong"), 300);
     }
-
     e.preventDefault();
   }
 });
 
-/* ====== NÚT ĐÁP ÁN ====== */
-document.getElementById("showAnswerBtn").addEventListener("click", () => {
-  if (current) {
-    document.getElementById("input").value = current[1]; // hiện đáp án
-    document.getElementById("input").focus();
-  }
+document.getElementById("showAnswerBtn").addEventListener("click", () =>{
+  document.getElementById("input").value = current[1];
 });
+document.getElementById("nextWordBtn").addEventListener("click", newWord);
 
-/* ====== NÚT NEXT ====== */
-document.getElementById("nextWordBtn").addEventListener("click", () => {
-  newWord();
-});
-
-/* ====== PHÁO HOA ====== */
 function celebrate() {
   for (let i = 0; i < 35; i++) {
     const c = document.createElement("div");
     c.className = "confetti";
-    c.style.background =
-      ["red", "hotpink", "cyan", "lime", "yellow", "violet"]
-      [Math.floor(Math.random() * 6)];
-    c.style.setProperty("--x", (Math.random() * 700 - 350) + "px");
-    c.style.setProperty("--y", (-Math.random() * 400 - 150) + "px");
+    c.style.background = ["red","hotpink","cyan","lime","yellow","violet"][Math.floor(Math.random()*6)];
+    c.style.setProperty("--x", (Math.random()*700-350)+"px");
+    c.style.setProperty("--y", (-Math.random()*400-150)+"px");
     document.body.appendChild(c);
     setTimeout(() => c.remove(), 1200);
   }
 }
 
-/* ====== START GAME ====== */
 shuffleWords();
 newWord();
 fall();
 </script>
-
 </body>
 </html>
